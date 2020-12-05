@@ -11,6 +11,10 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
+
+    public const TYPE_ADMIN = 1;
+    public const TYPE_USER = 2;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -18,7 +22,12 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'login',
+        'phone',
         'email',
+        'date_of_birth',
+        'about',
+        'type',
         'password',
     ];
 
