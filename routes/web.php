@@ -27,10 +27,10 @@ Route::get('profile',  [App\Http\Controllers\HomeController::class, 'profile'])
     ->middleware('auth')
     ->name('profile');
 
-Route::delete('/user/delete/{id}',  [App\Http\Controllers\UserController::class, 'destroy'])
+Route::patch('/user/block/{id}',  [App\Http\Controllers\UserController::class, 'block'])
     ->middleware('auth')
-    ->name('user.delete');
+    ->name('user.block');
 
-Route::patch('/user/restore/{id}',  [App\Http\Controllers\UserController::class, 'restore'])
+Route::patch('/user/unblock/{id}',  [App\Http\Controllers\UserController::class, 'unblock'])
     ->middleware('auth')
-    ->name('user.restore');
+    ->name('user.unblock');

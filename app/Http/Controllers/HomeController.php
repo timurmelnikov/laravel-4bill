@@ -33,10 +33,15 @@ class HomeController extends Controller
     {
         $currentUser = Auth::user();
 
-        $users = User::where('id', '!=', Auth::id())
+
+        if($currentUser->isAdmin()){
+            $users = User::where('id', '!=', Auth::id())
             ->withTrashed()
             ->paginate(3);
 
         return view('profile', compact('currentUser', 'users'));
+        }
+
+        return view('profile', compact('currentUser'));
     }
 }

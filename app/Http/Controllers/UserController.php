@@ -3,34 +3,44 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Policies\Abilities;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
 
-    // FIXME Закрыть  при помощи политики
     /**
      * Delete user
      *
      * @param int $id
      * @return void
      */
-    public function destroy($id)
+    public function block($id)
     {
-        User::destroy($id);
+        $this->authorize(Abilities::DELETE, User::class);
+
+        $user = User::findOrFail($id);
+        $user->blocked_at = Carbon::now();
+        $user->save();
+
         return redirect()->back();
     }
 
-    // FIXME Закрыть  при помощи политики
     /**
      * Restore user
      *
      * @param int $id
      * @return void
      */
-    public function restore($id)
+    public function unblock($id)
     {
-        User::withTrashed()->find($id)->restore();
+        $this->authorize(Abilities::RESTORE, User::class);
+
+        $user = User::findOrFail($id);
+        $user->blocked_at = null;
+        $user->save();
+
         return redirect()->back();
     }
 }

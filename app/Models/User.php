@@ -62,4 +62,17 @@ class User extends Authenticatable
         }
         return false;
     }
+
+    /**
+     * Заблокирован ли пользователь
+     *
+     * @return boolean
+     */
+    public function isBlocked()
+    {
+        if($this->blocked_at){
+            return true;
+        }
+        return false;
+    }
 }

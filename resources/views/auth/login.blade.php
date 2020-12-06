@@ -4,6 +4,20 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
+
+
+            @foreach (['error', 'warning', 'success', 'info'] as $msg)
+            @if(Session::has('alert-' . $msg))
+
+            <div class="alert alert-{{ $msg === 'error' ? 'danger' : $msg }} alert-dismissible fade show" role="alert">
+                {!! Session::get('alert-' . $msg) !!}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            @endif
+            @endforeach
+
             <div class="card">
                 <div class="card-header">{{ __('Login') }}</div>
 

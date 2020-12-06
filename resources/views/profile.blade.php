@@ -31,7 +31,7 @@
                                 <td>{{ $currentUser->date_of_birth }}</td>
                             </tr>
                             <tr>
-                                <th scope="row">about</th>
+                                <th scope="row">About</th>
                                 <td>{{ $currentUser->about }}</td>
                             </tr>
                             <tr>
@@ -44,6 +44,7 @@
                 </div>
             </div>
 
+            @if ($currentUser->isAdmin())
             <div class="card  mt-4">
                 <div class="card-header">{{ __('Users') }}</div>
                 <div class="card-body">
@@ -52,7 +53,7 @@
                         <thead>
                             <tr>
                                 <th scope="col">id</th>
-                                <th scope="col">Nmae</th>
+                                <th scope="col">Login</th>
                                 <th scope="col">E-mail</th>
                                 <th scope="col">Phone</th>
                                 <th scope="col">Actions</th>
@@ -60,37 +61,36 @@
                         </thead>
                         <tbody>
                             @forelse ($users as $user)
-                            <tr @if ($user->trashed()) class="text-danger" @endif>
-                                <th scope="row">{{ $user->id }}</th>
-                                <td>{{ $user->name }}</td>
-                                <td>{{ $user->email }}</td>
-                                <td>{{ $user->phone }}</td>
+                            <tr>
+                                <td @if ($user->isBlocked()) class="deleted" @endif>{{ $user->id }}</td>
+                                <td @if ($user->isBlocked()) class="deleted" @endif>{{ $user->login }}</td>
+                                <td @if ($user->isBlocked()) class="deleted" @endif>{{ $user->email }}</td>
+                                <td @if ($user->isBlocked()) class="deleted" @endif>{{ $user->phone }}</td>
                                 <td>
-                                    @if ($user->trashed())
+                                    @if ($user->isBlocked())
                                     <button class="btn btn-sm btn-success btn-block" onclick="
                                     event.preventDefault();
-                                    if (confirm('{{ __('Restore user ') }}' + ' ID={{ $user->id }} ?')) {
-                                         $('#restore-form-{{ $user->id }}').submit();
+                                    if (confirm('{{ __('Unblock user ') }}' + ' ID={{ $user->id }} ?')) {
+                                         $('#unblock-form-{{ $user->id }}').submit();
                                     };
-                                    ">restore</button>
-                                    <form id="restore-form-{{ $user->id }}"
-                                        action="{{ route('user.restore', $user->id) }}" method="POST" class="d-none">
+                                    ">unblock</button>
+                                    <form id="unblock-form-{{ $user->id }}"
+                                        action="{{ route('user.unblock', $user->id) }}" method="POST" class="d-none">
                                         @method('PATCH')
                                         @csrf
                                     </form>
                                     @else
 
-
                                     <button class="btn btn-sm btn-danger btn-block" onclick="
                                     event.preventDefault();
-                                    if (confirm('{{ __('Delete user ') }}' + ' ID={{ $user->id }} ?')) {
-                                         $('#delete-form-{{ $user->id }}').submit();
+                                    if (confirm('{{ __('Block user ') }}' + ' ID={{ $user->id }} ?')) {
+                                         $('#block-form-{{ $user->id }}').submit();
                                     };
-                                    ">delete</button>
+                                    ">block</button>
 
-                                    <form id="delete-form-{{ $user->id }}"
-                                        action="{{ route('user.delete', $user->id) }}" method="POST" class="d-none">
-                                        @method('DELETE')
+                                    <form id="block-form-{{ $user->id }}"
+                                        action="{{ route('user.block', $user->id) }}" method="POST" class="d-none">
+                                        @method('PATCH')
                                         @csrf
                                     </form>
 
@@ -111,7 +111,7 @@
                     {{ $users->links() }}
                 </div>
             </div>
-
+            @endif
         </div>
     </div>
 </div>
